@@ -1,5 +1,10 @@
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 
-const Root = () => <div>Root</div>;
+const Root = () => (
+  <ThemeProvider theme={{}}>
+    <div>Root</div>
+  </ThemeProvider>
+);
 
 export default Root;
