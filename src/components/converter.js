@@ -1,11 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Wrapper from './wrapper';
 import Input from './input';
 import Select from './select';
 import { CURRENCIES_LIST, DEFAULT_CURRENCY } from '../constants/currencies';
 
-const Converter = ({ sourceCurrency }) => (
+const Converter = () => (
   <Wrapper header={<div>Currency converter</div>}>
     <div>
       <Input value="" onChange={() => {}} name="From" />
@@ -17,13 +16,5 @@ const Converter = ({ sourceCurrency }) => (
     </div>
   </Wrapper>
 );
-
-Converter.propTypes = {
-  sourceCurrency: PropTypes.string,
-};
-
-Converter.defaultProps = {
-  sourceCurrency: DEFAULT_CURRENCY,
-};
 
 export default Converter;
