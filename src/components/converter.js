@@ -1,34 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, Select, MenuItem } from '@material-ui/core';
-import { CURRENCIES_LIST} from '../constants/currencies';
 import Wrapper from './wrapper';
+import Input from './input';
+import Select from './select';
+import { CURRENCIES_LIST, DEFAULT_CURRENCY } from '../constants/currencies';
 
-const Converter = ({ sourceCurrency }) => {
-  return (
-    <Wrapper header={<div>Currency converter</div>}>
-      <FormControl>
-        <Select
-          value="USD"
-          onChange={() => {}}
-          displayEmpty
-          name="source"
-        >
-          {CURRENCIES_LIST.map(currency => (
-            <MenuItem key={currency} value={currency}>{currency}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Wrapper>
-  );
-};
+const Converter = ({ sourceCurrency }) => (
+  <Wrapper header={<div>Currency converter</div>}>
+    <div>
+      <Input value="" onChange={() => {}} name="From" />
+      <Select items={CURRENCIES_LIST} onChange={() => {}} value={DEFAULT_CURRENCY} name="from" />
+    </div>
+    <div>
+      <Input value="" onChange={() => {}} name="To" />
+      <Select items={CURRENCIES_LIST} onChange={() => {}} value={CURRENCIES_LIST[0]} name="to" />
+    </div>
+  </Wrapper>
+);
 
 Converter.propTypes = {
   sourceCurrency: PropTypes.string,
 };
 
 Converter.defaultProps = {
-  sourceCurrency: 'USD',
+  sourceCurrency: DEFAULT_CURRENCY,
 };
 
 export default Converter;

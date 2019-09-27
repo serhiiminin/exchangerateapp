@@ -7,17 +7,21 @@ const WrapperCmp = styled.article`
 `;
 
 const Header = styled.div`
-  background: #121AA0;
+  background: #121aa0;
   color: #fff;
   height: 50px;
   display: flex;
   align-items: center;
 `;
 
+const Body = styled.div`
+  padding: 10px 15px;
+`;
+
 const Wrapper = ({ header, children }) => (
   <WrapperCmp>
     <Header>{header}</Header>
-    {children}
+    <Body>{children}</Body>
   </WrapperCmp>
 );
 

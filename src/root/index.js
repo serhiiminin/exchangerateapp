@@ -1,13 +1,13 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { Normalize } from 'styled-normalize'
+import { Normalize } from 'styled-normalize';
 import { Header, Main, Rates, Converter } from '../components';
 
 const Root = () => (
   <ThemeProvider theme={{}}>
     <>
-      <Normalize/>
+      <Normalize />
       <Header />
       <Main>
         <Grid container spacing={3}>

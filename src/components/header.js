@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const HeaderCmp = styled.header`
   margin-bottom: 40px;
-  background: #121AA0;
+  background: #121aa0;
   height: 70px;
   display: flex;
   justify-content: center;
@@ -13,7 +13,7 @@ const HeaderCmp = styled.header`
 const Title = styled.h1`
   color: white;
   margin: 0;
-`
+`;
 
 const Header = () => (
   <HeaderCmp>
@@ -21,4 +21,4 @@ const Header = () => (
   </HeaderCmp>
 );
 
-export default Header
+export default Header;
