@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 import Wrapper from './wrapper';
+import { DEFAULT_CURRENCY, CURRENCIES_RATE } from "../constants/currencies";
 
 const data = {
   rates: {
@@ -43,11 +44,10 @@ const data = {
   date: '2019-09-26',
 };
 
-const DEFAULT_COUNTRIES = ['EUR', 'GBP', 'CAD', 'MXN', 'JPY'];
-
 const Rates = ({ sourceCurrency }) => {
+  // const currentCurrency = CURRENCIES_RATE.includes(sourceCurrency) ? DEFAULT_CURRENCY : sourceCurrency;
   useEffect(() => {}, [sourceCurrency]);
-  const rates = Object.entries(data.rates).filter(([country]) => DEFAULT_COUNTRIES.includes(country));
+  const rates = Object.entries(data.rates).filter(([currency]) => CURRENCIES_RATE.includes(currency));
 
   return (
     <Wrapper
@@ -75,7 +75,7 @@ Rates.propTypes = {
 };
 
 Rates.defaultProps = {
-  sourceCurrency: 'USD',
+  sourceCurrency: DEFAULT_CURRENCY,
 };
 
 export default Rates;
