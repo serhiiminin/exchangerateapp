@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const HeaderCmp = styled.header`
   margin-bottom: 40px;
-  background: #121aa0;
+  background: ${props => props.theme.colors.background};
   height: 70px;
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@ const HeaderCmp = styled.header`
 `;
 
 const Title = styled.h1`
-  color: white;
+  color: ${props => props.theme.colors.light};
   margin: 0;
 `;
 

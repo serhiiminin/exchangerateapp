@@ -3,8 +3,16 @@ import { ThemeProvider } from 'styled-components';
 import { Normalize } from 'styled-normalize';
 import { Header, Main, Rates, Converter } from '../components';
 
+const theme = {
+  colors: {
+    background: '#121aa0',
+    text: '#000',
+    light: '#fff',
+  },
+};
+
 const Root = () => (
-  <ThemeProvider theme={{}}>
+  <ThemeProvider theme={theme}>
     <>
       <Normalize />
       <Header />

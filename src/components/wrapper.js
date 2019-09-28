@@ -3,19 +3,19 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const WrapperCmp = styled.article`
-  border: 1px solid #000;
+  border: 1px solid ${props => props.theme.colors.text};
 `;
 
 const Header = styled.header`
-  background: #121aa0;
-  color: #fff;
+  background: ${props => props.theme.colors.background};
+  color: ${props => props.theme.colors.light};
   height: 50px;
   display: flex;
   align-items: center;
 `;
 
 const Body = styled.div`
-  padding: 10px 15px;
+  padding: 1rem;
 `;
 
 const Wrapper = ({ header, children }) => (

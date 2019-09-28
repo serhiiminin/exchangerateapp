@@ -6,9 +6,10 @@ import styled from 'styled-components';
 import Wrapper from './wrapper';
 import { DEFAULT_CURRENCY } from '../constants/currencies';
 import { StoreContext } from '../stores';
+import RatesList from './rates-list';
 
 const HeaderGrid = styled(Grid)`
-  padding: 0 10px;
+  padding: 0 1rem;
 `;
 
 const LoadingWrapper = styled.div`
@@ -39,14 +40,7 @@ const Rates = observer(() => {
           <CircularProgress />
         </LoadingWrapper>
       ) : (
-        <ul>
-          {todayRates.map(([country, rate]) => (
-            <li key={country}>
-              <span>{country}: </span>
-              <span>{rate}</span>
-            </li>
-          ))}
-        </ul>
+        <RatesList rates={todayRates} />
       )}
     </Wrapper>
   );

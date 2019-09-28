@@ -12,8 +12,8 @@ import { extractFloatNumber } from '../util';
 const ConverterInputs = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 15px;
-  margin-bottom: 25px;
+  gap: 1rem;
+  margin-bottom: 2rem;
 `;
 
 const Converter = observer(() => {
