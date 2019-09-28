@@ -11,6 +11,12 @@ const HeaderGrid = styled(Grid)`
   padding: 0 10px;
 `;
 
+const LoadingWrapper = styled.div`
+  display: grid;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Rates = observer(() => {
   const { getRates, cleanList, loading, sourceCurrency, todayRates } = useContext(StoreContext);
   useEffect(() => {
@@ -29,7 +35,9 @@ const Rates = observer(() => {
       }
     >
       {loading ? (
-        <CircularProgress />
+        <LoadingWrapper>
+          <CircularProgress />
+        </LoadingWrapper>
       ) : (
         <ul>
           {todayRates.map(([country, rate]) => (

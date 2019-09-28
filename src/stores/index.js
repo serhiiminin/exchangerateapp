@@ -54,7 +54,9 @@ export const StoreContext = createContext(
         api
           .getBased(currency)
           .then(({ rates }) => {
-            this.setRates(Object.fromEntries(Object.entries(rates).map(([key, value]) => [key, roundFloor(value)])));
+            this.setRates(
+              Object.fromEntries(Object.entries(rates).map(([key, value]) => [key, String(roundFloor(value))]))
+            );
           })
           .catch(error => {
             this.setError(error);
