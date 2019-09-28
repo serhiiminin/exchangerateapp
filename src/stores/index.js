@@ -1,7 +1,13 @@
 import { createContext } from 'react';
 import { configure, observable, action } from 'mobx';
 import api from '../api';
-import { CURRENCIES_RATE, DEFAULT_CURRENCY, PRIORITY_CURRENCY } from '../constants/currencies';
+import {
+  CURRENCIES_RATE,
+  DEFAULT_CURRENCY,
+  DEFAULT_SOURCE_VALUE,
+  DEFAULT_TARGET_VALUE,
+  PRIORITY_CURRENCY,
+} from '../constants/currencies';
 import { roundFloor } from '../util';
 
 configure({ enforceActions: 'observed' });
@@ -17,8 +23,8 @@ export const StoreContext = createContext(
       error: null,
       sourceCurrency: DEFAULT_CURRENCY,
       targetCurrency: PRIORITY_CURRENCY,
-      sourceValue: '1000',
-      targetValue: '0',
+      sourceValue: DEFAULT_SOURCE_VALUE,
+      targetValue: DEFAULT_TARGET_VALUE,
       get todayRates() {
         const ratesList = this.rates || {};
         const listOfCurrenciesWithDefault = CURRENCIES_RATE.includes(this.sourceCurrency)
@@ -32,7 +38,12 @@ export const StoreContext = createContext(
       },
       get targetRate() {
         const ratesList = this.rates || {};
-        return ratesList[this.targetCurrency] || '0';
+        return ratesList[this.targetCurrency] || '0.00';
+      },
+      get targetCalculatedValue() {
+        const ratesList = this.rates || {};
+
+        return String(Number(ratesList[this.targetCurrency] || 0) * Number(this.sourceValue));
       },
       changeValue(key, value) {
         this[key] = value;
