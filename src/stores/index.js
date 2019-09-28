@@ -38,10 +38,10 @@ export const StoreContext = createContext(
       setError(error) {
         this.error = error;
       },
-      getRates() {
+      getRates(currency = this.sourceCurrency) {
         this.startLoading();
         api
-          .getLatest('')
+          .getBased(currency)
           .then(rates => {
             this.setRates(rates);
           })

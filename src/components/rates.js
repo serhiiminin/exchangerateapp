@@ -11,12 +11,13 @@ const HeaderGrid = styled(Grid)`
   padding: 0 10px;
 `;
 
-const Rates = observer(({ sourceCurrency }) => {
-  const { getRates, cleanList, loading, todayRates } = useContext(StoreContext);
+const Rates = observer(() => {
+  const { getRates, cleanList, loading, sourceCurrency, todayRates } = useContext(StoreContext);
   useEffect(() => {
-    getRates();
+    getRates(sourceCurrency);
+
     return cleanList;
-  }, [getRates, cleanList, todayRates.length]);
+  }, [getRates, cleanList, sourceCurrency]);
 
   return (
     <Wrapper
