@@ -2,6 +2,7 @@ import { createContext } from 'react';
 import { configure, observable, action } from 'mobx';
 import api from '../api';
 import { CURRENCIES_RATE, DEFAULT_CURRENCY, PRIORITY_CURRENCY } from '../constants/currencies';
+import { roundFloor } from '../util';
 
 configure({ enforceActions: 'observed' });
 
@@ -16,7 +17,7 @@ export const StoreContext = createContext(
       sourceValue: '1000',
       targetValue: '0',
       get todayRates() {
-        const rates = (this.rates || {}).rates || {};
+        const ratesList = this.rates || {};
         const listOfCurrenciesWithDefault = CURRENCIES_RATE.includes(this.sourceCurrency)
           ? [...CURRENCIES_RATE, DEFAULT_CURRENCY]
           : CURRENCIES_RATE;
@@ -24,7 +25,11 @@ export const StoreContext = createContext(
         const listCurrencies = [this.sourceCurrency, this.targetCurrency].includes(PRIORITY_CURRENCY)
           ? listOfCurrenciesWithDefault
           : [PRIORITY_CURRENCY, ...listOfCurrenciesWithDefault.slice(0, listOfCurrenciesWithDefault.length - 1)];
-        return listCurrencies.map(currency => [currency, rates[currency]]);
+        return listCurrencies.map(currency => [currency, ratesList[currency]]);
+      },
+      get targetRate() {
+        const ratesList = this.rates || {};
+        return ratesList[this.targetCurrency] || '0';
       },
       changeValue(key, value) {
         this[key] = value;
@@ -48,8 +53,8 @@ export const StoreContext = createContext(
         this.startLoading();
         api
           .getBased(currency)
-          .then(rates => {
-            this.setRates(rates);
+          .then(({ rates }) => {
+            this.setRates(Object.fromEntries(Object.entries(rates).map(([key, value]) => [key, roundFloor(value)])));
           })
           .catch(error => {
             this.setError(error);

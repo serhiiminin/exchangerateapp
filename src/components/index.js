@@ -1,4 +1,5 @@
 export { default as Converter } from './converter';
+export { default as ConverterRate } from './converter-rate';
 export { default as Header } from './header';
 export { default as History } from './history';
 export { default as Input } from './input';
