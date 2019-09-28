@@ -8,6 +8,7 @@ import ConverterRate from './converter-rate';
 import { CURRENCIES_LIST } from '../constants/currencies';
 import { StoreContext } from '../stores';
 import { extractFloatNumber } from '../util';
+import Menu from './menu';
 
 const ConverterInputs = styled.div`
   display: grid;
@@ -30,7 +31,7 @@ const Converter = observer(() => {
   };
 
   return (
-    <Wrapper header={<div>Currency converter</div>}>
+    <Wrapper header={<Menu items={[{ title: 'Currency converter', path: '/' }]} />}>
       <ConverterInputs>
         <Input label="From" value={sourceValue} onChange={onChangeInput} name="sourceValue" />
         <Select items={CURRENCIES_LIST} onChange={onChange} value={sourceCurrency} name="sourceCurrency" />

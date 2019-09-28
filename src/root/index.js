@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { Normalize } from 'styled-normalize';
 import { Header, Main, Rates, Converter } from '../components';
 
@@ -11,10 +11,22 @@ const theme = {
   },
 };
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    overflow-x: hidden;
+    color: ${props => props.theme.colors.text};
+    margin: 0;
+  } 
+  * {
+    box-sizing: border-box;
+  }
+`;
+
 const Root = () => (
   <ThemeProvider theme={theme}>
     <>
       <Normalize />
+      <GlobalStyle />
       <Header />
       <Main>
         <Converter />
