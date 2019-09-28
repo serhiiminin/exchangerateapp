@@ -1,10 +1,10 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import Wrapper from './wrapper';
-import { DEFAULT_CURRENCY, CURRENCIES_RATE } from '../constants/currencies';
+import { DEFAULT_CURRENCY } from '../constants/currencies';
 import { StoreContext } from '../stores';
 
 const HeaderGrid = styled(Grid)`
@@ -15,8 +15,8 @@ const Rates = observer(({ sourceCurrency }) => {
   const store = useContext(StoreContext);
   useEffect(() => {
     store.getRates();
-  }, [sourceCurrency, store]);
-  const rates = Object.entries({}).filter(([currency]) => CURRENCIES_RATE.includes(currency));
+    return store.cleanList;
+  }, [store, store.sourceValue]);
 
   return (
     <Wrapper
@@ -28,7 +28,7 @@ const Rates = observer(({ sourceCurrency }) => {
       }
     >
       <ul>
-        {rates.map(([country, rate]) => (
+        {[].map(([country, rate]) => (
           <li key={country}>
             <span>{country}: </span>
             <span>{rate}</span>
