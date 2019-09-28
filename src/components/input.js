@@ -8,7 +8,7 @@ const InputCmp = ({ value, label, onChange, name }) => (
 
 InputCmp.propTypes = {
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
 };

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import Wrapper from './wrapper';
@@ -29,7 +29,7 @@ const Rates = observer(() => {
       }
     >
       {loading ? (
-        'loading'
+        <CircularProgress />
       ) : (
         <ul>
           {todayRates.map(([country, rate]) => (

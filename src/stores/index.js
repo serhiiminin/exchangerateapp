@@ -13,8 +13,8 @@ export const StoreContext = createContext(
       error: null,
       sourceCurrency: DEFAULT_CURRENCY,
       targetCurrency: PRIORITY_CURRENCY,
-      sourceValue: 1000,
-      targetValue: 0,
+      sourceValue: '1000',
+      targetValue: '0',
       get todayRates() {
         const rates = (this.rates || {}).rates || {};
         const listOfCurrenciesWithDefault = CURRENCIES_RATE.includes(this.sourceCurrency)
