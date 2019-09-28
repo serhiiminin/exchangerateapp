@@ -6,6 +6,9 @@ import { roundFloor } from '../util';
 
 configure({ enforceActions: 'observed' });
 
+const roundRates = rates =>
+  Object.fromEntries(Object.entries(rates).map(([key, value]) => [key, String(roundFloor(value))]));
+
 export const StoreContext = createContext(
   observable(
     {
@@ -54,9 +57,7 @@ export const StoreContext = createContext(
         api
           .getBased(currency)
           .then(({ rates }) => {
-            this.setRates(
-              Object.fromEntries(Object.entries(rates).map(([key, value]) => [key, String(roundFloor(value))]))
-            );
+            this.setRates(roundRates(rates));
           })
           .catch(error => {
             this.setError(error);
@@ -66,7 +67,7 @@ export const StoreContext = createContext(
     },
     {
       getRates: action.bound,
-      changeValue: action,
+      changeValue: action.bound,
       startLoading: action,
       finishLoading: action.bound,
       cleanRates: action.bound,

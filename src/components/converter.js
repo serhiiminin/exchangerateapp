@@ -16,25 +16,23 @@ const ConverterInputs = styled.div`
 `;
 
 const Converter = observer(() => {
-  const store = useContext(StoreContext);
+  const { changeValue, sourceValue, sourceCurrency, targetValue, targetCurrency, targetRate } = useContext(
+    StoreContext
+  );
 
   const onChange = event => {
-    store.changeValue(event.target.name, event.target.value);
+    changeValue(event.target.name, event.target.value);
   };
 
   return (
     <Wrapper header={<div>Currency converter</div>}>
       <ConverterInputs>
-        <Input label="From" value={store.sourceValue} onChange={onChange} name="sourceValue" />
-        <Select items={CURRENCIES_LIST} onChange={onChange} value={store.sourceCurrency} name="sourceCurrency" />
-        <Input label="To" value={store.targetValue} onChange={onChange} name="targetValue" />
-        <Select items={CURRENCIES_LIST} onChange={onChange} value={store.targetCurrency} name="targetCurrency" />
+        <Input label="From" value={sourceValue} onChange={onChange} name="sourceValue" />
+        <Select items={CURRENCIES_LIST} onChange={onChange} value={sourceCurrency} name="sourceCurrency" />
+        <Input label="To" value={targetValue} onChange={onChange} name="targetValue" />
+        <Select items={CURRENCIES_LIST} onChange={onChange} value={targetCurrency} name="targetCurrency" />
       </ConverterInputs>
-      <ConverterRate
-        sourceCurrency={store.sourceCurrency}
-        targetCurrency={store.targetCurrency}
-        targetRate={store.targetRate}
-      />
+      <ConverterRate sourceCurrency={sourceCurrency} targetCurrency={targetCurrency} targetRate={targetRate} />
     </Wrapper>
   );
 });
