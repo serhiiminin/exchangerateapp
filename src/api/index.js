@@ -5,7 +5,8 @@ const fetcher = createFetcherJson(window.fetch);
 const { endpoint } = config;
 
 const createApi = apiEndpoint => ({
-  get: searchParams => fetcher(`${apiEndpoint}?${searchParams}`),
+  getLatest: searchParams => fetcher({ endpoint: `${apiEndpoint}/latest?${searchParams}` }),
+  getHistory: searchParams => fetcher({ endpoint: `${apiEndpoint}/history?${searchParams}` }),
 });
 
 export default createApi(endpoint);

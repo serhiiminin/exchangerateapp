@@ -6,7 +6,7 @@ const WrapperCmp = styled.article`
   border: 1px solid #000;
 `;
 
-const Header = styled.div`
+const Header = styled.header`
   background: #121aa0;
   color: #fff;
   height: 50px;
