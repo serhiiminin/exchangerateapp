@@ -1,22 +1,24 @@
 import { createContext } from 'react';
 import { configure, observable, action } from 'mobx';
 import api from '../api';
-import { DEFAULT_CURRENCY, PRIORITY_CURRENCY } from '../constants/currencies';
+import { CURRENCIES_RATE, DEFAULT_CURRENCY, PRIORITY_CURRENCY } from '../constants/currencies';
 
 configure({ enforceActions: 'observed' });
 
 export const StoreContext = createContext(
   observable(
     {
-      ratesList: null,
+      rates: null,
       loading: false,
       error: null,
       sourceCurrency: DEFAULT_CURRENCY,
       targetCurrency: PRIORITY_CURRENCY,
       sourceValue: 1000,
       targetValue: 0,
-      get updatedList() {
-        return this.ratesList;
+      get todayRates() {
+        return Object.entries((this.rates || {}).rates || {}).filter(([currency]) =>
+          CURRENCIES_RATE.includes(currency)
+        );
       },
       changeValue(key, value) {
         this[key] = value;
@@ -26,6 +28,15 @@ export const StoreContext = createContext(
       },
       finishLoading() {
         this.loading = false;
+      },
+      setRates(rates) {
+        this.rates = rates;
+      },
+      cleanRates() {
+        this.rates = null;
+      },
+      setError(error) {
+        this.error = error;
       },
       getRates() {
         this.startLoading();
@@ -39,22 +50,13 @@ export const StoreContext = createContext(
           })
           .finally(this.finishLoading);
       },
-      cleanList() {
-        this.ratesList = null;
-      },
-      setRates(rates) {
-        this.ratesList = rates;
-      },
-      setError(error) {
-        this.error = error;
-      },
     },
     {
       getRates: action.bound,
       changeValue: action,
       startLoading: action,
       finishLoading: action.bound,
-      cleanList: action.bound,
+      cleanRates: action.bound,
       setRates: action,
       setError: action,
     }

@@ -12,11 +12,11 @@ const HeaderGrid = styled(Grid)`
 `;
 
 const Rates = observer(({ sourceCurrency }) => {
-  const store = useContext(StoreContext);
+  const { getRates, cleanList, loading, todayRates } = useContext(StoreContext);
   useEffect(() => {
-    store.getRates();
-    return store.cleanList;
-  }, [store, store.sourceValue]);
+    getRates();
+    return cleanList;
+  }, [getRates, cleanList, todayRates.length]);
 
   return (
     <Wrapper
@@ -27,14 +27,18 @@ const Rates = observer(({ sourceCurrency }) => {
         </HeaderGrid>
       }
     >
-      <ul>
-        {[].map(([country, rate]) => (
-          <li key={country}>
-            <span>{country}: </span>
-            <span>{rate}</span>
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        'loading'
+      ) : (
+        <ul>
+          {todayRates.map(([country, rate]) => (
+            <li key={country}>
+              <span>{country}: </span>
+              <span>{rate}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </Wrapper>
   );
 });
