@@ -16,9 +16,15 @@ export const StoreContext = createContext(
       sourceValue: 1000,
       targetValue: 0,
       get todayRates() {
-        return Object.entries((this.rates || {}).rates || {}).filter(([currency]) =>
-          CURRENCIES_RATE.includes(currency)
-        );
+        const rates = (this.rates || {}).rates || {};
+        const listOfCurrenciesWithDefault = CURRENCIES_RATE.includes(this.sourceCurrency)
+          ? [...CURRENCIES_RATE, DEFAULT_CURRENCY]
+          : CURRENCIES_RATE;
+
+        const listCurrencies = [this.sourceCurrency, this.targetCurrency].includes(PRIORITY_CURRENCY)
+          ? listOfCurrenciesWithDefault
+          : [PRIORITY_CURRENCY, ...listOfCurrenciesWithDefault.slice(0, listOfCurrenciesWithDefault.length - 1)];
+        return listCurrencies.map(currency => [currency, rates[currency]]);
       },
       changeValue(key, value) {
         this[key] = value;
