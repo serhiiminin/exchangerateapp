@@ -56,8 +56,10 @@ export const StoreContext = createContext(
         this[key] = value;
       },
       changeCurrency(key, value) {
+        const chosenRate = this[RATES][value] || EMPTY_VALUE;
         this.setValue(key, value);
-        this[TARGET_VALUE] = multiplyAmount(this[SOURCE_VALUE], this[CHOSEN_RATE]);
+        this.setValue(CHOSEN_RATE, chosenRate);
+        this[TARGET_VALUE] = multiplyAmount(this[SOURCE_VALUE], chosenRate);
       },
       changeSourceValue(key, value) {
         this.setValue(key, value);
