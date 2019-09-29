@@ -1,13 +1,12 @@
 import createFetcherJson from './fetcher';
+import fetchProxy from './proxy';
 import config from '../config';
 
-const fetcher = createFetcherJson(window.fetch);
-const { endpoint } = config;
+const fetcher = fetchProxy(createFetcherJson(window.fetch));
+const { endpoints } = config;
 
-const createApi = apiEndpoint => ({
-  getLatest: searchParams => fetcher({ endpoint: `${apiEndpoint}/latest?${searchParams}` }),
-  getBased: currency => fetcher({ endpoint: `${apiEndpoint}/latest?base=${currency}` }),
-  getHistory: searchParams => fetcher({ endpoint: `${apiEndpoint}/history?${searchParams}` }),
+const createApi = apiEndpoints => ({
+  getBased: currency => fetcher({ endpoint: `${apiEndpoints.latest}?base=${currency}` }),
 });
 
-export default createApi(endpoint);
+export default createApi(endpoints);
