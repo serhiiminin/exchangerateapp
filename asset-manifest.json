@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/exchangerateapp/static/js/main.b5b217a0.chunk.js",
-    "main.js.map": "/exchangerateapp/static/js/main.b5b217a0.chunk.js.map",
+    "main.js": "/exchangerateapp/static/js/main.12250a03.chunk.js",
+    "main.js.map": "/exchangerateapp/static/js/main.12250a03.chunk.js.map",
     "runtime-main.js": "/exchangerateapp/static/js/runtime-main.19105e36.js",
     "runtime-main.js.map": "/exchangerateapp/static/js/runtime-main.19105e36.js.map",
-    "static/js/2.2ef058f7.chunk.js": "/exchangerateapp/static/js/2.2ef058f7.chunk.js",
-    "static/js/2.2ef058f7.chunk.js.map": "/exchangerateapp/static/js/2.2ef058f7.chunk.js.map",
+    "static/js/2.c9fdb190.chunk.js": "/exchangerateapp/static/js/2.c9fdb190.chunk.js",
+    "static/js/2.c9fdb190.chunk.js.map": "/exchangerateapp/static/js/2.c9fdb190.chunk.js.map",
     "index.html": "/exchangerateapp/index.html",
-    "precache-manifest.6a6cf6364d4c64273ba70040a281a219.js": "/exchangerateapp/precache-manifest.6a6cf6364d4c64273ba70040a281a219.js",
+    "precache-manifest.4e3bf42cdd7a10bbdb64cf748b358675.js": "/exchangerateapp/precache-manifest.4e3bf42cdd7a10bbdb64cf748b358675.js",
     "service-worker.js": "/exchangerateapp/service-worker.js"
   }
 }
