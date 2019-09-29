@@ -27,7 +27,8 @@ const Converter = observer(() => {
     sourceCurrency,
     targetCurrency,
     chosenRate,
-    changeCurrency,
+    changeSourceCurrency,
+    changeTargetCurrency,
     changeSourceValue,
     changeTargetValue,
   } = useContext(StoreContext);
@@ -39,14 +40,14 @@ const Converter = observer(() => {
         <Select
           name="sourceCurrency"
           items={CURRENCIES_LIST}
-          onChange={onChange(changeCurrency)}
+          onChange={onChange(changeSourceCurrency)}
           value={sourceCurrency}
         />
         <Input name="targetValue" label="To" value={targetValue} onChange={onChange(changeTargetValue)} />
         <Select
           name="targetCurrency"
           items={CURRENCIES_LIST}
-          onChange={onChange(changeCurrency)}
+          onChange={onChange(changeTargetCurrency)}
           value={targetCurrency}
         />
       </ConverterInputs>

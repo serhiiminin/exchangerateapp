@@ -55,28 +55,32 @@ export const StoreContext = createContext(
       setValue(key, value) {
         this[key] = value;
       },
-      changeCurrency(key, value) {
+      changeSourceCurrency(key, value) {
+        this.setValue(key, value);
+        this.setValue(TARGET_VALUE, multiplyAmount(this[SOURCE_VALUE], this[CHOSEN_RATE]));
+      },
+      changeTargetCurrency(key, value) {
         const chosenRate = this[RATES][value] || EMPTY_VALUE;
         this.setValue(key, value);
         this.setValue(CHOSEN_RATE, chosenRate);
-        this[TARGET_VALUE] = multiplyAmount(this[SOURCE_VALUE], chosenRate);
+        this.setValue(TARGET_VALUE, multiplyAmount(this[SOURCE_VALUE], chosenRate));
       },
       changeSourceValue(key, value) {
         this.setValue(key, value);
-        this[TARGET_VALUE] = multiplyAmount(value, this[CHOSEN_RATE]);
+        this.setValue(TARGET_VALUE, multiplyAmount(value, this[CHOSEN_RATE]));
       },
       changeTargetValue(key, value) {
         this.setValue(key, value);
-        this[SOURCE_VALUE] = divideAmount(value, this[CHOSEN_RATE]);
+        this.setValue(SOURCE_VALUE, divideAmount(value, this[CHOSEN_RATE]));
       },
       startLoading() {
-        this[LOADING] = true;
+        this.setValue(LOADING, true);
       },
       finishLoading() {
-        this[LOADING] = false;
+        this.setValue(LOADING, false);
       },
       cleanRates() {
-        this[RATES] = null;
+        this.setValue(SOURCE_VALUE, null);
       },
       getRates(currency = this[SOURCE_CURRENCY]) {
         this.startLoading();
@@ -99,7 +103,8 @@ export const StoreContext = createContext(
     {
       getRates: action.bound,
       setValue: action.bound,
-      changeCurrency: action.bound,
+      changeSourceCurrency: action.bound,
+      changeTargetCurrency: action.bound,
       changeSourceValue: action.bound,
       changeTargetValue: action.bound,
       startLoading: action.bound,
