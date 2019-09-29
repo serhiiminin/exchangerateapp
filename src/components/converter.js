@@ -2,12 +2,11 @@ import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import Wrapper from './wrapper';
-import Input from './input';
+import Input from './input-number';
 import Select from './select';
 import ConverterRate from './converter-rate';
 import { CURRENCIES_LIST } from '../constants/currencies';
 import { StoreContext } from '../stores';
-import { extractFloatNumber } from '../util';
 import Menu from './menu';
 
 const ConverterInputs = styled.div`
@@ -17,26 +16,39 @@ const ConverterInputs = styled.div`
   margin-bottom: 2rem;
 `;
 
-const Converter = observer(() => {
-  const { changeValue, sourceValue, sourceCurrency, targetCurrency, targetRate, targetCalculatedValue } = useContext(
-    StoreContext
-  );
+const onChange = handler => event => {
+  handler(event.target.name, event.target.value);
+};
 
-  const onChange = event => {
-    changeValue(event.target.name, event.target.value);
-  };
-  const onChangeInput = event => {
-    const { value } = event.target;
-    changeValue(event.target.name, extractFloatNumber(value));
-  };
+const Converter = observer(() => {
+  const {
+    sourceValue,
+    targetValue,
+    sourceCurrency,
+    targetCurrency,
+    targetRate,
+    changeCurrency,
+    changeSourceValue,
+    changeTargetValue,
+  } = useContext(StoreContext);
 
   return (
     <Wrapper header={<Menu items={[{ title: 'Currency converter', path: '/' }]} />}>
       <ConverterInputs>
-        <Input label="From" value={sourceValue} onChange={onChangeInput} name="sourceValue" />
-        <Select items={CURRENCIES_LIST} onChange={onChange} value={sourceCurrency} name="sourceCurrency" />
-        <Input label="To" value={targetCalculatedValue} onChange={onChangeInput} name="targetValue" />
-        <Select items={CURRENCIES_LIST} onChange={onChange} value={targetCurrency} name="targetCurrency" />
+        <Input name="sourceValue" label="From" value={sourceValue} onChange={onChange(changeSourceValue)} />
+        <Select
+          name="sourceCurrency"
+          items={CURRENCIES_LIST}
+          onChange={onChange(changeCurrency)}
+          value={sourceCurrency}
+        />
+        <Input name="targetValue" label="To" value={targetValue} onChange={onChange(changeTargetValue)} />
+        <Select
+          name="targetCurrency"
+          items={CURRENCIES_LIST}
+          onChange={onChange(changeCurrency)}
+          value={targetCurrency}
+        />
       </ConverterInputs>
       <ConverterRate sourceCurrency={sourceCurrency} targetCurrency={targetCurrency} targetRate={targetRate} />
     </Wrapper>

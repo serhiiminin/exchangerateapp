@@ -25,7 +25,7 @@ const Item = styled.li`
 const Menu = ({ items }) => (
   <List>
     {items.map(({ title, path }) => (
-      <Item key={title}>{title}</Item>
+      <Item key={path}>{title}</Item>
     ))}
   </List>
 );
