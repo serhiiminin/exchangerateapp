@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { configure, observable, action } from 'mobx';
 import api from '../api';
 import {
-  CURRENCIES_RATE,
+  CURRENCIES_RATES,
   DEFAULT_CURRENCY,
   DEFAULT_SOURCE_VALUE,
   EMPTY_VALUE,
@@ -16,6 +16,18 @@ const roundRates = rates =>
   Object.fromEntries(
     Object.entries(rates).map(([key, value]) => [key, String(fixNumberToPlace(roundFloor(value), 4))])
   );
+
+const calculateTodayRatesCurrencies = ({ rates, sourceCurrency, targetCurrency }) => {
+  const ratesList = rates || {};
+  const isPriorityInConverter = [sourceCurrency, targetCurrency].includes(PRIORITY_CURRENCY);
+
+  return CURRENCIES_RATES.map((currency, index) => {
+    const priorityCurrency = !isPriorityInConverter && index === 0 ? PRIORITY_CURRENCY : currency;
+    const resultCurrency = priorityCurrency === sourceCurrency ? DEFAULT_CURRENCY : priorityCurrency;
+
+    return [resultCurrency, ratesList[resultCurrency]];
+  });
+};
 
 const getRate = (rates, currency) => (rates || {})[currency] || EMPTY_VALUE;
 
@@ -36,15 +48,11 @@ export const StoreContext = createContext(
       sourceValue: DEFAULT_SOURCE_VALUE,
       targetValue: EMPTY_VALUE,
       get todayRates() {
-        const ratesList = this.rates || {};
-        const listOfCurrenciesWithDefault = CURRENCIES_RATE.includes(this.sourceCurrency)
-          ? [...CURRENCIES_RATE, DEFAULT_CURRENCY]
-          : CURRENCIES_RATE;
-
-        const listCurrencies = [this.sourceCurrency, this.targetCurrency].includes(PRIORITY_CURRENCY)
-          ? listOfCurrenciesWithDefault
-          : [PRIORITY_CURRENCY, ...listOfCurrenciesWithDefault.slice(0, listOfCurrenciesWithDefault.length - 1)];
-        return listCurrencies.map(currency => [currency, ratesList[currency]]);
+        return calculateTodayRatesCurrencies({
+          rates: this.rates || {},
+          sourceCurrency: this.sourceCurrency,
+          targetCurrency: this.targetCurrency,
+        });
       },
       get targetRate() {
         return getRate(this.rates, this.targetCurrency);
