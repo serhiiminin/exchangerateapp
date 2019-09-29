@@ -1,5 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Technologies stack 
+
+### `react, mobx, material-ui`
+<br>
+
 ## Available Scripts
 
 To start development process run:
