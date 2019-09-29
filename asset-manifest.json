@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/exchangerateapp/static/js/main.0df88b7f.chunk.js",
+    "main.js.map": "/exchangerateapp/static/js/main.0df88b7f.chunk.js.map",
+    "runtime-main.js": "/exchangerateapp/static/js/runtime-main.19105e36.js",
+    "runtime-main.js.map": "/exchangerateapp/static/js/runtime-main.19105e36.js.map",
+    "static/js/2.a0b2369c.chunk.js": "/exchangerateapp/static/js/2.a0b2369c.chunk.js",
+    "static/js/2.a0b2369c.chunk.js.map": "/exchangerateapp/static/js/2.a0b2369c.chunk.js.map",
+    "index.html": "/exchangerateapp/index.html",
+    "precache-manifest.f643ec696cf2bf3d14994f410de3f6eb.js": "/exchangerateapp/precache-manifest.f643ec696cf2bf3d14994f410de3f6eb.js",
+    "service-worker.js": "/exchangerateapp/service-worker.js"
+  }
+}
