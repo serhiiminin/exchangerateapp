@@ -8,14 +8,12 @@ import {
   EMPTY_VALUE,
   PRIORITY_CURRENCY,
 } from '../constants/currencies';
-import { calculateAmount, divide, fixNumberToPlace, isFloatNumber, multiply, roundFloor } from '../util';
+import { calculateAmount, divide, fixNumberToPlace, isFloatNumber, multiply } from '../util';
 
 configure({ enforceActions: 'observed' });
 
 const roundRates = rates =>
-  Object.fromEntries(
-    Object.entries(rates).map(([key, value]) => [key, String(fixNumberToPlace(roundFloor(value), 4))])
-  );
+  Object.fromEntries(Object.entries(rates).map(([key, value]) => [key, String(fixNumberToPlace(value, 4))]));
 
 const calculateTodayRatesCurrencies = ({ rates, sourceCurrency, targetCurrency }) => {
   const ratesList = rates || {};
