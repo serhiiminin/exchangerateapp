@@ -21,24 +21,33 @@ const calculateCurrencyAmount = handler => (value, rate) =>
 const multiplyAmount = (value, rate) => calculateCurrencyAmount(multiply)(value, rate);
 const divideAmount = (value, rate) => calculateCurrencyAmount(divide)(value, rate);
 
+const RATES = 'rates';
+const LOADING = 'loading';
+const ERROR = 'error';
+const SOURCE_CURRENCY = 'sourceCurrency';
+const SOURCE_VALUE = 'sourceValue';
+const TARGET_CURRENCY = 'targetCurrency';
+const TARGET_VALUE = 'targetValue';
+const CHOSEN_RATE = 'chosenRate';
+
 export const StoreContext = createContext(
   observable(
     {
-      rates: null,
-      loading: false,
-      error: null,
-      sourceCurrency: DEFAULT_CURRENCY,
-      targetCurrency: PRIORITY_CURRENCY,
-      sourceValue: DEFAULT_SOURCE_VALUE,
-      targetValue: EMPTY_VALUE,
-      chosenRate: EMPTY_VALUE,
+      [RATES]: null,
+      [LOADING]: false,
+      [ERROR]: null,
+      [SOURCE_CURRENCY]: DEFAULT_CURRENCY,
+      [TARGET_CURRENCY]: PRIORITY_CURRENCY,
+      [SOURCE_VALUE]: DEFAULT_SOURCE_VALUE,
+      [TARGET_VALUE]: EMPTY_VALUE,
+      [CHOSEN_RATE]: EMPTY_VALUE,
       get todayRates() {
-        const ratesList = this.rates || {};
-        const isPriorityInConverter = [this.sourceCurrency, this.targetCurrency].includes(PRIORITY_CURRENCY);
+        const ratesList = this[RATES] || {};
+        const isPriorityInConverter = [this[SOURCE_CURRENCY], this[TARGET_CURRENCY]].includes(PRIORITY_CURRENCY);
 
         return CURRENCIES_RATES.map((currency, index) => {
           const priorityCurrency = !isPriorityInConverter && index === 0 ? PRIORITY_CURRENCY : currency;
-          const resultCurrency = priorityCurrency === this.sourceCurrency ? DEFAULT_CURRENCY : priorityCurrency;
+          const resultCurrency = priorityCurrency === this[SOURCE_CURRENCY] ? DEFAULT_CURRENCY : priorityCurrency;
 
           return [resultCurrency, ratesList[resultCurrency]];
         });
@@ -48,42 +57,39 @@ export const StoreContext = createContext(
       },
       changeCurrency(key, value) {
         this.setValue(key, value);
-        this.targetValue = multiplyAmount(this.sourceValue, this.chosenRate);
+        this[TARGET_VALUE] = multiplyAmount(this[SOURCE_VALUE], this[CHOSEN_RATE]);
       },
       changeSourceValue(key, value) {
         this.setValue(key, value);
-        this.targetValue = multiplyAmount(value, this.chosenRate);
+        this[TARGET_VALUE] = multiplyAmount(value, this[CHOSEN_RATE]);
       },
       changeTargetValue(key, value) {
         this.setValue(key, value);
-        this.sourceValue = divideAmount(value, this.chosenRate);
-      },
-      setError(error) {
-        this.error = error;
+        this[SOURCE_VALUE] = divideAmount(value, this[CHOSEN_RATE]);
       },
       startLoading() {
-        this.loading = true;
+        this[LOADING] = true;
       },
       finishLoading() {
-        this.loading = false;
+        this[LOADING] = false;
       },
       cleanRates() {
-        this.rates = null;
+        this[RATES] = null;
       },
-      getRates(currency = this.sourceCurrency) {
+      getRates(currency = this[SOURCE_CURRENCY]) {
         this.startLoading();
         api
           .getBased(currency)
           .then(({ rates }) => {
             const updatedRates = roundRates(rates);
-            const chosenRate = updatedRates[this.targetCurrency] || EMPTY_VALUE;
+            const chosenRate = updatedRates[this[TARGET_CURRENCY]] || EMPTY_VALUE;
 
-            this.setValue('rates', updatedRates);
-            this.setValue('chosenRate', chosenRate);
-            this.setValue('targetValue', multiplyAmount(this.sourceValue, chosenRate));
+            this.setValue(RATES, updatedRates);
+            this.setValue(CHOSEN_RATE, chosenRate);
+            this.setValue(TARGET_VALUE, multiplyAmount(this[SOURCE_VALUE], chosenRate));
           })
           .catch(error => {
-            this.setError(error);
+            this.setValue(ERROR, error);
           })
           .finally(this.finishLoading);
       },
@@ -97,7 +103,6 @@ export const StoreContext = createContext(
       startLoading: action.bound,
       finishLoading: action.bound,
       cleanRates: action.bound,
-      setError: action.bound,
     }
   )
 );
