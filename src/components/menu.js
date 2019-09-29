@@ -16,7 +16,7 @@ const Item = styled.li`
   background: ${props => props.theme.colors.light};
   color: ${props => props.theme.colors.background};
   font-weight: bold;
-  width: 200px;
+  min-width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;

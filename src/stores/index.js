@@ -8,7 +8,7 @@ import {
   EMPTY_VALUE,
   PRIORITY_CURRENCY,
 } from '../constants/currencies';
-import { fixNumberToPlace, isFloatNumber, roundFloor } from '../util';
+import { calculateAmount, divide, fixNumberToPlace, isFloatNumber, multiply, roundFloor } from '../util';
 
 configure({ enforceActions: 'observed' });
 
@@ -18,10 +18,12 @@ const roundRates = rates =>
   );
 
 const getRate = (rates, currency) => (rates || {})[currency] || EMPTY_VALUE;
-const calculateAmount = operation => (amount, rate) =>
-  String(fixNumberToPlace(operation(Number(amount || 0), Number(rate)), 2));
-const divide = (a, b) => a / b;
-const multiply = (a, b) => a * b;
+
+const calculateCurrencyAmount = handler => (value, rate) =>
+  isFloatNumber(value) ? calculateAmount(handler)(value, rate) : EMPTY_VALUE;
+
+const multiplyAmount = (value, rate) => calculateCurrencyAmount(multiply)(value, rate);
+const divideAmount = (value, rate) => calculateCurrencyAmount(divide)(value, rate);
 
 export const StoreContext = createContext(
   observable(
@@ -52,21 +54,15 @@ export const StoreContext = createContext(
       },
       changeCurrency(key, value) {
         this.changeValue(key, value);
-        this.targetValue = isFloatNumber(this.sourceValue)
-          ? calculateAmount(multiply)(this.sourceValue, getRate(this.rates, this.targetCurrency))
-          : EMPTY_VALUE;
+        this.targetValue = multiplyAmount(this.sourceValue, getRate(this.rates, this.targetCurrency));
       },
       changeSourceValue(key, value) {
         this.changeValue(key, value);
-        this.targetValue = isFloatNumber(value)
-          ? calculateAmount(multiply)(value, getRate(this.rates, this.targetCurrency))
-          : EMPTY_VALUE;
+        this.targetValue = multiplyAmount(value, getRate(this.rates, this.targetCurrency));
       },
       changeTargetValue(key, value) {
         this.changeValue(key, value);
-        this.sourceValue = isFloatNumber(value)
-          ? calculateAmount(divide)(value, getRate(this.rates, this.targetCurrency))
-          : EMPTY_VALUE;
+        this.sourceValue = divideAmount(value, getRate(this.rates, this.targetCurrency));
       },
       setTargetAmount(amount) {
         this.targetValue = amount;
@@ -93,9 +89,7 @@ export const StoreContext = createContext(
           .then(({ rates }) => {
             const updatedRates = roundRates(rates);
             this.setRates(updatedRates);
-            this.setTargetAmount(
-              calculateAmount(multiply)(this.sourceValue, getRate(updatedRates, this.targetCurrency))
-            );
+            this.setTargetAmount(multiplyAmount(this.sourceValue, getRate(updatedRates, this.targetCurrency)));
           })
           .catch(error => {
             this.setError(error);
