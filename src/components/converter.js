@@ -26,7 +26,7 @@ const Converter = observer(() => {
     targetValue,
     sourceCurrency,
     targetCurrency,
-    targetRate,
+    chosenRate,
     changeCurrency,
     changeSourceValue,
     changeTargetValue,
@@ -50,7 +50,7 @@ const Converter = observer(() => {
           value={targetCurrency}
         />
       </ConverterInputs>
-      <ConverterRate sourceCurrency={sourceCurrency} targetCurrency={targetCurrency} targetRate={targetRate} />
+      <ConverterRate sourceCurrency={sourceCurrency} targetCurrency={targetCurrency} chosenRate={chosenRate} />
     </Wrapper>
   );
 });

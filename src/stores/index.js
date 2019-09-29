@@ -29,8 +29,6 @@ const calculateTodayRatesCurrencies = ({ rates, sourceCurrency, targetCurrency }
   });
 };
 
-const getRate = (rates, currency) => (rates || {})[currency] || EMPTY_VALUE;
-
 const calculateCurrencyAmount = handler => (value, rate) =>
   isFloatNumber(value) ? calculateAmount(handler)(value, rate) : EMPTY_VALUE;
 
@@ -47,6 +45,7 @@ export const StoreContext = createContext(
       targetCurrency: PRIORITY_CURRENCY,
       sourceValue: DEFAULT_SOURCE_VALUE,
       targetValue: EMPTY_VALUE,
+      chosenRate: EMPTY_VALUE,
       get todayRates() {
         return calculateTodayRatesCurrencies({
           rates: this.rates || {},
@@ -54,26 +53,32 @@ export const StoreContext = createContext(
           targetCurrency: this.targetCurrency,
         });
       },
-      get targetRate() {
-        return getRate(this.rates, this.targetCurrency);
-      },
       changeValue(key, value) {
         this[key] = value;
       },
       changeCurrency(key, value) {
         this.changeValue(key, value);
-        this.targetValue = multiplyAmount(this.sourceValue, getRate(this.rates, this.targetCurrency));
+        this.targetValue = multiplyAmount(this.sourceValue, this.chosenRate);
       },
       changeSourceValue(key, value) {
         this.changeValue(key, value);
-        this.targetValue = multiplyAmount(value, getRate(this.rates, this.targetCurrency));
+        this.targetValue = multiplyAmount(value, this.chosenRate);
       },
       changeTargetValue(key, value) {
         this.changeValue(key, value);
-        this.sourceValue = divideAmount(value, getRate(this.rates, this.targetCurrency));
+        this.sourceValue = divideAmount(value, this.chosenRate);
       },
       setTargetAmount(amount) {
         this.targetValue = amount;
+      },
+      setChosenRate(value) {
+        this.chosenRate = value;
+      },
+      setRates(rates) {
+        this.rates = rates;
+      },
+      setError(error) {
+        this.error = error;
       },
       startLoading() {
         this.loading = true;
@@ -81,14 +86,8 @@ export const StoreContext = createContext(
       finishLoading() {
         this.loading = false;
       },
-      setRates(rates) {
-        this.rates = rates;
-      },
       cleanRates() {
         this.rates = null;
-      },
-      setError(error) {
-        this.error = error;
       },
       getRates(currency = this.sourceCurrency) {
         this.startLoading();
@@ -96,8 +95,11 @@ export const StoreContext = createContext(
           .getBased(currency)
           .then(({ rates }) => {
             const updatedRates = roundRates(rates);
+            const chosenRate = updatedRates[this.targetCurrency] || EMPTY_VALUE;
+
             this.setRates(updatedRates);
-            this.setTargetAmount(multiplyAmount(this.sourceValue, getRate(updatedRates, this.targetCurrency)));
+            this.setChosenRate(chosenRate);
+            this.setTargetAmount(multiplyAmount(this.sourceValue, chosenRate));
           })
           .catch(error => {
             this.setError(error);
@@ -115,6 +117,7 @@ export const StoreContext = createContext(
       finishLoading: action.bound,
       cleanRates: action.bound,
       setRates: action.bound,
+      setChosenRate: action.bound,
       setTargetAmount: action.bound,
       setError: action.bound,
     }
