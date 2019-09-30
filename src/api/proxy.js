@@ -8,6 +8,8 @@ const fetchProxy = fetcher => params => {
   return fetcher({
     ...params,
     endpoint: `${proxy}${endpoint}`,
+  }).catch(() => {
+    throw new Error('Proxy unavailable');
   });
 };
 

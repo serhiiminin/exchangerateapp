@@ -18,13 +18,25 @@ const LoadingWrapper = styled.div`
   justify-content: center;
 `;
 
+const ErrorMessage = styled.div`
+  font-weight: bold;
+`;
+
 const Rates = observer(() => {
-  const { getRates, cleanList, loading, sourceCurrency, todayRates } = useContext(StoreContext);
+  const { getRates, cleanList, loading, sourceCurrency, todayRates, error } = useContext(StoreContext);
   useEffect(() => {
     getRates(sourceCurrency);
 
     return cleanList;
   }, [getRates, cleanList, sourceCurrency]);
+
+  const Cmp = loading ? (
+    <LoadingWrapper>
+      <CircularProgress />
+    </LoadingWrapper>
+  ) : (
+    <RatesList rates={todayRates} />
+  );
 
   return (
     <Wrapper
@@ -35,13 +47,7 @@ const Rates = observer(() => {
         </HeaderGrid>
       }
     >
-      {loading ? (
-        <LoadingWrapper>
-          <CircularProgress />
-        </LoadingWrapper>
-      ) : (
-        <RatesList rates={todayRates} />
-      )}
+      {error ? <ErrorMessage>Server error. Something went wrong. Please, try again later</ErrorMessage> : Cmp}
     </Wrapper>
   );
 });
